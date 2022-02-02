@@ -19,3 +19,10 @@ def input_data():
 def send():
     redis.publish('queries', request.form.get('input_text'))
     return redirect('/')
+
+
+@app.route('/transform_image', methods=['POST'])
+def transform_image():
+    file = request.files.get('image')
+    file.save(file.filename)
+    return redirect('/')
