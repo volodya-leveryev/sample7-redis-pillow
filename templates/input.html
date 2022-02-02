@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Перевертывание фраз</h1>
+                <h1>Обработка фраз и картинок</h1>
                 <h2>Результаты</h2>
                 <table class="table">
                     <thead>
@@ -22,10 +22,17 @@
                     </thead>
                     <tbody>
                         {% for ans in answers %}
+                        {% if 'image' in ans %}
+                        <tr>
+                            <td>{{ ans.image }}</td>
+                            <td><img src="static/{{ ans.image }}" alt=""></td>
+                        </tr>
+                        {% else %}
                         <tr>
                             <td>{{ ans.query }}</td>
                             <td>{{ ans.value }}</td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>

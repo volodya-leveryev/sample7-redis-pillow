@@ -1,20 +1,30 @@
-import json
+import os
+import pickle
  
 from flask import Flask, redirect, render_template, request
 from redis import Redis
  
 app = Flask(__name__)
 redis = Redis(host='localhost', port=6379)
- 
+
+
 @app.route('/')
 def input_data():
     try:
-        answers = json.loads(redis.get('answers'))
-    except (ValueError, TypeError):
+        answers = pickle.loads(redis.get('answers'))
+    except (ValueError, TypeError, pickle.UnpicklingError):
         answers = []
-    print(answers)
+    
+    image_files = os.listdir('static')
+    for ans in answers:
+        if 'image' in ans:
+            if ans['image'] not in image_files:
+                with open(os.path.join('static', ans['image']), mode='wb') as f:
+                    f.write(ans['value'])
+
     return render_template('input.html', answers=answers)
  
+
 @app.route('/send', methods=['POST'])
 def send():
     redis.publish('queries', request.form.get('input_text'))
@@ -24,5 +34,5 @@ def send():
 @app.route('/transform_image', methods=['POST'])
 def transform_image():
     file = request.files.get('image')
-    file.save(file.filename)
+    redis.publish('images', pickle.dumps(file))
     return redirect('/')
