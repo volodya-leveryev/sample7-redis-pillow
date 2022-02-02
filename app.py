@@ -19,8 +19,7 @@ def input_data():
     for ans in answers:
         if 'image' in ans:
             if ans['image'] not in image_files:
-                with open(os.path.join('static', ans['image']), mode='wb') as f:
-                    f.write(ans['value'])
+                ans['value'].save(os.path.join('static', ans['image']))
 
     return render_template('input.html', answers=answers)
  
@@ -34,5 +33,8 @@ def send():
 @app.route('/transform_image', methods=['POST'])
 def transform_image():
     file = request.files.get('image')
-    redis.publish('images', pickle.dumps(file))
+    redis.publish('images', pickle.dumps({
+        'data': file.stream,
+        'name': file.filename,
+    }))
     return redirect('/')
