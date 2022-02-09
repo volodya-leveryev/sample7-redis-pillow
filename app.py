@@ -68,6 +68,6 @@ def solve_equation():
     except ValueError:
         return redirect('/equations/?error=1')
 
-    equation = f'{a}*x**2 + {b}*x + {c}'
-    redis.publish('equation', equation)
+    equation = f'({a})*x**2 + ({b})*x + ({c})'
+    redis.publish('equations', equation)
     return redirect('/equations/')
