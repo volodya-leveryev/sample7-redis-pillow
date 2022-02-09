@@ -51,8 +51,23 @@ def transform_image():
 
 @app.route('/equations/')
 def equations():
+    error = request.args.get('error')
     try:
         answers = pickle.loads(redis.get('equation_answers'))
     except (ValueError, TypeError, pickle.UnpicklingError):
         answers = []
-    return render_template('equations.html', answers=answers)
+    return render_template('equations.html', error=error, answers=answers)
+
+
+@app.route('/solve_equation/', methods=['POST'])
+def solve_equation():
+    try:
+        a = float(request.form.get('a'))
+        b = float(request.form.get('b'))
+        c = float(request.form.get('c'))
+    except ValueError:
+        return redirect('/equations/?error=1')
+
+    equation = f'{a}*x**2 + {b}*x + {c}'
+    redis.publish('equation', equation)
+    return redirect('/equations/')

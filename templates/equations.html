@@ -24,10 +24,23 @@
     <hr>
 
     <h2>Ввод уравнения</h2>
-    <form action="/send" method="POST">
-        <div class="mb-3">
-            <label for="input_text" class="form-label">Введите уравнение</label>
-            <textarea name="input_text" id="input_text" class="form-control"></textarea>
+    {% if error %}
+    <p class="text-danger">Неправильные данные!</p>
+    {% endif %}
+    <form action="/solve_equation/" method="POST">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="a" class="form-label">Коэффициент A</label>
+                <input type="text" name="a" id="a" class="form-control">
+            </div>
+            <div class="col">
+                <label for="b" class="form-label">Коэффициент B</label>
+                <input type="text" name="b" id="b" class="form-control">
+            </div>
+            <div class="col">
+                <label for="c" class="form-label">Коэффициент C</label>
+                <input type="text" name="c" id="c" class="form-control">
+            </div>
         </div>
         <input type="submit" class="btn btn-primary" value="Отправить">
     </form>
