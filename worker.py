@@ -1,14 +1,19 @@
 import pickle
+import sys
 from time import sleep
 
 from PIL import Image
-from redis import Redis
+from redis import Redis, exceptions
 
-redis = Redis(host='localhost', port=6379)
-pubsub = redis.pubsub()
-pubsub.subscribe('queries')
-pubsub.subscribe('images')
- 
+try:
+    redis = Redis(host='localhost', port=6379)
+    pubsub = redis.pubsub()
+    pubsub.subscribe('queries')
+    pubsub.subscribe('images')
+except exceptions.ConnectionError as e:
+    print('Can\'t connect to Redis!')
+    sys.exit(1)
+
 while True:
     msg = pubsub.get_message()
     if msg and isinstance(msg['data'], bytes):
