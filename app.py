@@ -39,20 +39,16 @@ def pictures():
 
     return render_template('pictures.html', answers=answers)
 
+
 @app.route('/equations/')
 def equations():
     try:
-        answers = pickle.loads(redis.get('answers'))
+        answers = pickle.loads(redis.get('equation_answers'))
     except (ValueError, TypeError, pickle.UnpicklingError):
         answers = []
     
-    image_files = os.listdir('static')
-    for ans in answers:
-        if 'image' in ans:
-            if ans['image'] not in image_files:
-                ans['value'].save(os.path.join('static', ans['image']))
+    return render_template('equations.html', answers=answers)
 
-    return render_template('pictures.html', answers=answers)
 
 @app.route('/send', methods=['POST'])
 def send():

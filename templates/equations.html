@@ -1,0 +1,34 @@
+{% extends 'page.html' %}
+
+{% block content %}
+    <h1>Решение уравнений</h1>
+    
+    <h2>Результаты</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Запрос</th>
+                <th>Ответ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ans in answers %}
+            <tr>
+                <td>{{ ans.query }}</td>
+                <td>{{ ans.value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Ввод уравнения</h2>
+    <form action="/send" method="POST">
+        <div class="mb-3">
+            <label for="input_text" class="form-label">Введите уравнение</label>
+            <textarea name="input_text" id="input_text" class="form-control"></textarea>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Отправить">
+    </form>
+{% endblock %}
