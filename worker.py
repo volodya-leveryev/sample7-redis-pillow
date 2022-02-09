@@ -14,6 +14,7 @@ except exceptions.ConnectionError as e:
     print('Can\'t connect to Redis!')
     sys.exit(1)
 
+print('Start listening queries')
 while True:
     msg = pubsub.get_message()
     if msg and isinstance(msg['data'], bytes):

@@ -1,7 +1,7 @@
 {% extends 'page.html' %}
 
 {% block content %}
-    <h1>Обработка фраз</h1>
+    <h1>Обработка картинок</h1>
     <h2>Результаты</h2>
     <table class="table">
         <thead>
@@ -12,10 +12,10 @@
         </thead>
         <tbody>
             {% for ans in answers %}
-            {% if 'image' not in ans %}
+            {% if 'image' in ans %}
             <tr>
-                <td>{{ ans.query }}</td>
-                <td>{{ ans.value }}</td>
+                <td>{{ ans.image }}</td>
+                <td><img src="/static/{{ ans.image }}" alt="" width="50%"></td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -24,11 +24,11 @@
 
     <hr>
 
-    <h2>Ввод текста</h2>
-    <form action="/send" method="POST">
+    <h2>Загрузка изображения</h2>
+    <form action="/transform_image" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="input_text" class="form-label">Введите текст</label>
-            <textarea name="input_text" id="input_text" class="form-control"></textarea>
+            <label for="image" class="form-label">Выберите файл</label>
+            <input type="file" name="image" id="image" class="form-control">
         </div>
         <input type="submit" class="btn btn-primary" value="Отправить">
     </form>

@@ -22,7 +22,37 @@ def input_data():
                 ans['value'].save(os.path.join('static', ans['image']))
 
     return render_template('input.html', answers=answers)
- 
+
+
+@app.route('/pics/')
+def pictures():
+    try:
+        answers = pickle.loads(redis.get('answers'))
+    except (ValueError, TypeError, pickle.UnpicklingError):
+        answers = []
+    
+    image_files = os.listdir('static')
+    for ans in answers:
+        if 'image' in ans:
+            if ans['image'] not in image_files:
+                ans['value'].save(os.path.join('static', ans['image']))
+
+    return render_template('pictures.html', answers=answers)
+
+@app.route('/equations/')
+def equations():
+    try:
+        answers = pickle.loads(redis.get('answers'))
+    except (ValueError, TypeError, pickle.UnpicklingError):
+        answers = []
+    
+    image_files = os.listdir('static')
+    for ans in answers:
+        if 'image' in ans:
+            if ans['image'] not in image_files:
+                ans['value'].save(os.path.join('static', ans['image']))
+
+    return render_template('pictures.html', answers=answers)
 
 @app.route('/send', methods=['POST'])
 def send():
